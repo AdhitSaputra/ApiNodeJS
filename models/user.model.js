@@ -2,6 +2,7 @@ const { Model, DataTypes } = require('sequelize')
 const path = require('path')
 const bcrypt = require('bcrypt')
 const sequelize = require('./config')
+const { format } = require('url')
 
 class User extends Model {
   isUrl(value) {
@@ -48,10 +49,13 @@ User.init(
       defaultValue: 'user-default-profil.jpg',
       get() {
         const isurl = this.isUrl(this.getDataValue('avatar'))
-        const path = isurl
-          ? this.getDataValue('avatar')
-          : [process.env.fullUrl, this.getDataValue('avatar')].join('/')
-        return path
+        const url = format({
+          host: process.env.fullUrl,
+          pathname: path.join(
+            [process.env.MEDIA_STATIC, this.getDataValue('avatar')].join('/')
+          ),
+        })
+        return isurl ? this.getDataValue('avatar') : url
       },
     },
     password: {

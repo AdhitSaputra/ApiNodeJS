@@ -11,7 +11,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
-  '/media',
+  process.env.MEDIA_STATIC,
   express.static(
     path.join([process.cwd(), process.env.MEDIA_STATIC || 'static'].join('/'))
   )

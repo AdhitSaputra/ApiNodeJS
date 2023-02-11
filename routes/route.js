@@ -2,7 +2,7 @@ const express = require('express')
 
 const schema = require('../middleware/schema.validator')
 
-const { register, auth, userUpdate, getUser } = require('../controllers')
+const { register, auth, userUpdate } = require('../controllers')
 const { hasExist } = require('../middleware/content.middleware')
 const upload = require('../middleware/mediaFile')
 const {
@@ -10,7 +10,7 @@ const {
   hasExistUser,
   verifyToken,
 } = require('../middleware/user.middleware')
-const { onlyAdmin, onlyStaff } = require('../middleware/admin')
+const { onlyAdmin } = require('../middleware/admin')
 const {
   getAllContent,
   createContent,
@@ -18,14 +18,15 @@ const {
   updateContent,
   deleteContent,
 } = require('../controllers/content.controller')
+const { deleteUser } = require('../controllers/user.controller')
 
 const Route = express.Router()
 const Schema = schema(true)
 
 Route.post('/register', [Schema, hasAlreadyUser], register)
 Route.post('/login', [Schema, hasExistUser], auth)
-Route.post('/user', [verifyToken, Schema, upload], userUpdate)
-Route.post('/getuser', [verifyToken, onlyStaff], getUser)
+Route.put('/user', [verifyToken, Schema, upload], userUpdate)
+Route.delete('/user/:id', [verifyToken, onlyAdmin], deleteUser)
 
 Route.get('/content', getAllContent)
 Route.post('/content/create', [verifyToken, Schema], createContent)

@@ -5,6 +5,16 @@ const sequelize = require('./config')
 const { format } = require('url')
 
 class User extends Model {
+  toJSON() {
+    const allowedField = ['email', 'firstname', 'lastname', 'avatar']
+    let attr = Object.assign({}, this.get())
+
+    for (let k in attr) {
+      if (!allowedField.includes(k)) delete attr[k]
+    }
+    return attr
+  }
+
   isUrl(value) {
     const regex =
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/

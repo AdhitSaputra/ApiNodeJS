@@ -78,11 +78,16 @@ async function userUpdate(req, res) {
   })
 }
 
-async function getUser(req, res) {
-  const user = await User.findByPk(req.user.id)
-  return res.status(200).json({
-    status: 200,
-    data: user,
+async function deleteUser(req, res) {
+  const hasDeleted = await User.destroy({ where: { id: req.params.id } })
+  if (hasDeleted) {
+    return res.status(204).json({
+      status: 204,
+    })
+  }
+  return res.status(404).json({
+    status: 404,
+    message: 'Data not found!',
   })
 }
 
@@ -90,5 +95,5 @@ module.exports = {
   register,
   auth,
   userUpdate,
-  getUser,
+  deleteUser,
 }

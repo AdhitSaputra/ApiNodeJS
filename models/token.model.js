@@ -2,13 +2,7 @@ const { Model, DataTypes, Op } = require('sequelize')
 const sequelize = require('./config')
 const User = require('./user.model')
 
-class Token extends Model {
-  toJSON() {
-    let attributes = Object.assign({}, this.get())
-    delete attributes.id
-    return attributes
-  }
-}
+class Token extends Model {}
 
 Token.init(
   {
@@ -50,6 +44,7 @@ Token.init(
   }
 )
 
+User.hasMany(Token, { onDelete: 'CASCADE' })
 Token.belongsTo(User)
 
 module.exports = Token

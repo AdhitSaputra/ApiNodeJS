@@ -14,7 +14,6 @@ Content.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    author: DataTypes.STRING,
   },
   {
     sequelize,
@@ -25,13 +24,14 @@ Content.init(
       include: {
         model: User,
         attributes: {
-          exclude: ['pathAvatar', 'password', 'isAdmin', 'isStaff'],
+          exclude: ['password'],
         },
       },
     },
   }
 )
 
-Content.belongsTo(User, { foreignKey: 'author', targetKey: 'email' })
+User.hasMany(Content, { onDelete: 'CASCADE' })
+Content.belongsTo(User)
 
 module.exports = Content

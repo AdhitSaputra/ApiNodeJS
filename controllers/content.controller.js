@@ -3,7 +3,7 @@ const Content = require('../models/content.model')
 
 async function getAllContent(req, res) {
   var query = req.query.search || ''
-  console.log(query)
+
   const content = await Content.findAll({
     where: {
       [Op.or]: [
@@ -19,7 +19,8 @@ async function getAllContent(req, res) {
 }
 
 async function createContent(req, res) {
-  const content = await Content.create({ ...req.body, author: req.user.email })
+  const content = await Content.create({ ...req.body, userId: req.user.id })
+
   return res.status(201).json({
     status: 201,
     data: content,
